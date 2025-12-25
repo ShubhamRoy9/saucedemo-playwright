@@ -1,0 +1,2 @@
+"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
+"","4835","User should place order successfully","","2025-12-25","passed","2025-12-25","","e2e\place-order.spec.js","",""
