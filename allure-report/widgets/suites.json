@@ -1,1 +1,1 @@
-{"total":1,"items":[{"uid":"27a9b232ccd7d0507cc8140d40216e6c","name":"e2e\\place-order.spec.js","statistic":{"failed":0,"broken":0,"skipped":0,"passed":1,"unknown":0,"total":1}}]}
+{"total":2,"items":[{"uid":"27a9b232ccd7d0507cc8140d40216e6c","name":"e2e\\place-order.spec.js","statistic":{"failed":0,"broken":0,"skipped":0,"passed":1,"unknown":0,"total":1}},{"uid":"bf358be59a95f3b2107e9d4969f69f0e","name":"e2e\\invalid-login.spec.js","statistic":{"failed":0,"broken":0,"skipped":0,"passed":1,"unknown":0,"total":1}}]}
