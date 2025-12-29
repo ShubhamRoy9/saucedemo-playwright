@@ -1,18 +1,26 @@
 const { defineConfig } = require('@playwright/test');
+const envConfig = require('./utils/env');   // <-- load env file
+
+// ENV value from CLI / CI / default
+const ENV = process.env.ENV || 'qa';
+
+console.log(`👉 Running tests on ENV: ${ENV}`);
 
 module.exports = defineConfig({
+
   testDir: './tests',
 
   use: {
-    baseURL: 'https://www.saucedemo.com',
+    baseURL: envConfig[ENV].baseURL,   // <-- dynamic URL
     headless: true,
     screenshot: 'only-on-failure',
-    video: 'retain-on-failure'
+    video: 'retain-on-failure',
+    trace: 'on-first-retry'
   },
 
   reporter: [
-    ['list'],                     // console output
-    ['html', { open: 'never' }],  // Playwright HTML report
-    ['allure-playwright']         // Allure results generator
+    ['list'],
+    ['html', { open: 'never' }],
+    ['allure-playwright']
   ]
 });
