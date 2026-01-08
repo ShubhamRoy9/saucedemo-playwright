@@ -5,7 +5,7 @@ const {ProductsPage} = require('../../pages/ProductsPage');
 
 const data = require('../../fixtures/testData.json');
 
-test('@regression products should sort by price low to high', async({page}) =>{
+test('@Regression products should sort by price low to high', async({page}) =>{
 
     const loginPage = new LoginPage(page);
     const productsPage = new ProductsPage(page);

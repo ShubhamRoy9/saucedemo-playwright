@@ -7,7 +7,7 @@ const { CheckoutPage } = require('../../pages/CheckoutPage');
 
 const testData = require('../../fixtures/testData.json');
 
-test('Valid User should place order successfully', async ({ page }) => {
+test('@Smoke @Regression Valid User should place order successfully', async ({ page }) => {
   const loginPage = new LoginPage(page);
   const productsPage = new ProductsPage(page);
   const cartPage = new CartPage(page);

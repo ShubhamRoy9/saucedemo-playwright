@@ -8,14 +8,22 @@ console.log(`👉 Running tests on ENV: ${ENV}`);
 
 module.exports = defineConfig({
 
+  // fullyParallel: true, // run tests in parallel across files
+  // workers: '50%', //use half of available CPU cores
+
   testDir: './tests',
+
+  retries: process.env.CI ? 2 : 0,
+
+  workers: process.env.CI ? '50%' : undefined,
 
   use: {
     baseURL: envConfig[ENV].baseURL,
-    headless: true,
+    headless: process.env.CI ? true : false,
     screenshot: 'only-on-failure',
-    video: 'retain-on-failure',
-    trace: 'on-first-retry'
+    video: process.env.CI ? 'retain-on-failure' : 'off',
+    // trace: 'on-first-retry',
+    trace: process.env.CI ? 'retain-on-failure' : 'off'
   },
 
   reporter: [

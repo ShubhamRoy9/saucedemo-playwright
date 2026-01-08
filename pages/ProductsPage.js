@@ -30,6 +30,19 @@ class ProductsPage {
         
     }
 
+    // price for specific product (used in subtotal validation)
+  async getProductPrice(name) {
+
+    const item = this.page.locator('.inventory_item', {
+      has: this.page.getByText(name)
+    });
+
+    const priceText = await item
+      .locator('[data-test="inventory-item-price"]')
+      .textContent();
+
+    return parseFloat(priceText.replace(/[^0-9.]/g, ''));
+  }
 
     async gotoCart() {
         await this.cartIcon.click();

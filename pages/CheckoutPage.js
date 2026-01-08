@@ -7,6 +7,7 @@ class CheckoutPage{
         this.continueButton = page.locator('#continue');
         this.finishButton = page.locator('#finish');
         this.successMessage = page.getByText('Thank you for your order!');
+        this.itemTotalLabel = page.locator('[data-test ="subtotal-label"]')
     }
 
     async fillDetails(firstName, lastName, postalCode) {
@@ -16,6 +17,11 @@ class CheckoutPage{
         await this.continueButton.click();
     }
 
+    async getItemTotal() {
+        const text = await this.itemTotalLabel.textContent();
+        return Number(text.replace('Item total: $', ''));
+    }
+    
     async finishOrder() {
         await this.finishButton.click();
     }
