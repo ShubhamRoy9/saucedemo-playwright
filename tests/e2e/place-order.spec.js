@@ -7,6 +7,7 @@ const { CheckoutPage } = require('../../pages/CheckoutPage');
 
 const testData = require('../../fixtures/testData.json');
 
+//just to test the ci/cd new branch , i am adding this comment 
 test('@Smoke @Regression Valid User should place order successfully', async ({ page }) => {
   const loginPage = new LoginPage(page);
   const productsPage = new ProductsPage(page);
