@@ -25,6 +25,8 @@ test('@Smoke @Regression Valid User should place order successfully', async ({ p
 
   await cartPage.checkout();
 
+  console.log('CI/CD Integration');
+
   await checkoutPage.fillDetails(
     testData.checkout.firstName,
     testData.checkout.lastName,
