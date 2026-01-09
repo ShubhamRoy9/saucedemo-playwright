@@ -36,5 +36,5 @@ test('@Smoke @Regression Valid User should place order successfully', async ({ p
   await checkoutPage.finishOrder();
 
   const message = await checkoutPage.getSuccessMessage();
-  expect(message).toContain('Thank you for your order');
+  expect(message).toContain('Thank youuuuuu for your order');
 });
