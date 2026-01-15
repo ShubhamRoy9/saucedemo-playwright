@@ -47,48 +47,48 @@ module.exports = { AmazonSearchPage };
 
 
 
-//FOR FLIPKART 
-async selectProductByNameFlipkart(productName) {
+// //FOR FLIPKART 
+// async selectProductByNameFlipkart(productName) {
 
-    const product = this.page
-        .locator('div._1AtVbE', { hasText: productName })
-        .first();
+//     const product = this.page
+//         .locator('div._1AtVbE', { hasText: productName })
+//         .first();
 
-    await product.click();
-}
+//     await product.click();
+// }
 
 
-//FOR AMAZON 
- async selectProductAddToCartAndVerify(productName){
+// //FOR AMAZON 
+//  async selectProductAddToCartAndVerify(productName){
 
-        const product = this.page
-            .locator('[data-component-type][data-asin]', { hasText: productName })
-            .first();
+//         const product = this.page
+//             .locator('[data-component-type][data-asin]', { hasText: productName })
+//             .first();
 
-        await product.click();
- }
+//         await product.click();
+//  }
 
  
- //Combine Logic 
- async searchSelectAndAddToCart(productName) {
+//  //Combine Logic 
+//  async searchSelectAndAddToCart(productName) {
 
-  // search
-  await this.page.fill('#twotabsearchtextbox', productName);
-  await this.page.click('#nav-search-submit-button');
+//   // search
+//   await this.page.fill('#twotabsearchtextbox', productName);
+//   await this.page.click('#nav-search-submit-button');
 
-  // select product by name
-  const product = this.page
-    .locator('[data-component-type][data-asin]', { hasText: productName })
-    .first();
+//   // select product by name
+//   const product = this.page
+//     .locator('[data-component-type][data-asin]', { hasText: productName })
+//     .first();
 
-  await product.click();
+//   await product.click();
 
-  // handle same tab / new tab
-  const pages = this.page.context().pages();
-  const productPage = pages[pages.length - 1];
+//   // handle same tab / new tab
+//   const pages = this.page.context().pages();
+//   const productPage = pages[pages.length - 1];
 
-  await productPage.waitForLoadState();
+//   await productPage.waitForLoadState();
 
-  // add to cart
-  await productPage.getByRole('button', { name: /add to cart/i }).click();
-}
+//   // add to cart
+//   await productPage.getByRole('button', { name: /add to cart/i }).click();
+// }

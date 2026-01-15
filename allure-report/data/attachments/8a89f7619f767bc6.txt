@@ -1,0 +1,2 @@
+calculated sum from product page: 113.94999999999999
+Item total displayed on checkput: 113.94999999999999
