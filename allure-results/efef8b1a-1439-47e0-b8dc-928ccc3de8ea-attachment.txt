@@ -1,0 +1,2 @@
+STATUS: 400
+RESPONSE: {"message":"User id is required"}

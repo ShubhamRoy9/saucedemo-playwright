@@ -1,0 +1,6 @@
+REQUEST PAYLOAD: {
+  title: 'Automation Test Post',
+  body: 'Created using Playwright API',
+  userId: 121
+}
+RESPONSE: { id: 101 }

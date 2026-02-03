@@ -1,0 +1,6 @@
+UPDATE PAYLOAD: {
+  title: 'Update Automated Post',
+  body: 'Updated using Playwright API',
+  userId: 121
+}
+RESPONSE: { id: 1 }
