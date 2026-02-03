@@ -1,0 +1,578 @@
+#                 **************************** Playwright E2E Testing with AI for Beginners - Zero to Hero  (valentin Despa, Alex Dan) *******************************
+# ****************************                                                                                         *******************************
+
+# 1. AAA feature
+
+# Arrange : Arranging the page
+# Act : Making action on page
+# Assertion : Adding assertion
+
+# 2. test fixture will exclude bcp (browser contex page) - launching it manually
+
+# 3. if any title is returning promise then we have to give await (e.g. - await expect(servicesHeading).toBeVisible() : to be visible is returning promises);
+
+# 4. expect(itemText).toBeTruthy() - It means anything but false, 0, '', null, undefined or NaN
+
+# 5. CSS selector is not recommended as styling of web is keep changing , so try to use GetBy Role etc and other locator
+
+# 6. Navigating from child to Parent
+# first get the exact child id then for parent (   const cookie = acceptCookie.locator('..') - we will be using '..' to navigate to parent similar to any command promt )
+
+# 7. To get the nth item from list use nth(2/1/0...)
+# E.g. - Const listItems = page.getByRole('listItem')
+# const thirdItem = listItems.nth(2)
+
+# 8. Unique way of Writing the code
+# E.g.
+# test('Click action - with key down', async ({page}) => {
+# await page.goto('FeedBackForm.html');
+# const improvementInput = page.getByLabel('Areas for Improvement')
+# const firstOption = improvementInput.getByRole('option').first();  // selecting first option
+# const secondOption = improvementInput.getByRole('option').nth(1); // Selecting 2nd option
+# await firstOption.click();
+# await expect(improvementInput).toHaveValue('content')
+# //selecting 2nd element along with 1st by selscting control button from keyboard, modifiers works as physical control button click
+# await secondOption.click({
+# modifiers: \\\\\\\\\\\\\\\['Control']
+# })
+
+
+
+
+#  	await expect(improvementInput).toHaveValues(['content', 'presentation'])
+# })
+
+# 9. Playwright Annotation
+# ( test.only, test.fail, test.skip - when wanted to skip any test , test.fixme- it will also skip the test, with the perception of that we will be fixing it later  )
+
+# e.g. test.fail(' Failing test -1', async()=> {
+# expect(false).toBeTruthy()
+# })
+
+# Playwright Hooks
+# test.beforAll(), test.beforeEach(), test.AfterAll(), test.AfterEach()
+
+# describe function - it is used as block , it will run all the test under it
+# test.describe('dd', ()=>{
+# test('with', ()=>{})
+# });
+
+# Playwright Tags , it will come under argument and it can be single tag or array of tag
+# We can add tag at test level as well as describe level
+# e.g  test('aaaa', {tag: '@regression' }, ()=> {...
+# or   test('aaa', {tag: ['@regression', '@sanity']}, ()=> {...
+# or test('@regression test', async({page})=> {...}
+
+# 13.  suppose i have to run the tag name regression
+# npx playwright test --grep "@regression"
+
+# Default no of workers: half the number of processors
+# Use "Projects" in config file to run tests on multiple devices
+# e.g.  projects: [
+# {
+# name: 'chromium',
+# use: { ...devices['Desktop Chrome'], },
+# },
+# {
+# name: 'Firefox',
+# use: { ...devices['Desktop firefox'], },
+# },
+# ]
+# or we can use it for different env.
+# projects: [
+#  	{
+# name: 'staging',
+# use: {
+# baseURL : 'stage.example.com',
+# },
+# retries: 2,
+# },
+# {
+#  name: 'production',
+# use: {
+# baseURL : 'prod.example.com',
+# },
+# retries: 2,
+# },
+
+
+# 16. A unique way to get locator,
+# first grab the locator then move to parent locator then grab the first child locator (why this way - incase of dynamic locator value)
+# const subTotalWrapper = page.getByText('subtotal').locator('..').locator('.font-semibold')     - here we are grabbing subtotal, then ('..') - going to parent then grabbing semibold locator.
+
+
+# 17. Run API Test
+# 1st set projects in config file
+# projects: [
+# {
+# name: 'api-test',
+#  	testDir: './api-test',   // this is the location of api-test folder
+# use: {
+# baseURL: 'https://api.valentinos-magic-beams.click',
+# extraHTTPHeaders: {
+# 'Accepts': 'application/json',  // if we will be working with json project then it will accept only json
+# 'Content-Type': 'application/json', // and also content type will be json too
+# }
+# }
+
+# 2nd step , in test file use "request" object and parse the response to JS , because response will be in JSON format and we need in jS format , using parsing method " .json() "
+# eg.
+# import { test } from '@playwright/test';
+# test('should get all products', async ({ request }) => {
+# const reposne = await request.get('/products');
+# const responseBody = await response.json();  // parsing the json reposne into js using .json()
+# console.log(repsonseBody);
+# });
+
+
+# 3rd add some assertion
+# 1- status code assertion
+# expect((response.status()).toBe(200);
+# 2 - check header
+# expect((response,headers()['content-type']).toBe('application/json');
+# 3 - Response body validation
+# expect(responseBody).toHaveProperty('success', true); - check if response body has property or not
+# expect(responseBody).toHaveProperty('data'); - to check property has data or not
+# expect(Array.isArray(responseBody.data)).toBe(true); - to check those data is coming in array format or not
+# expect(reponseBody.data.length).toBeGreaterThan(0); - that data length is greater than 0 or not
+
+
+# run API test = npx playwright test --project=api-test
+
+# CI/CD - PIPELINE
+# defining baseurl or local host
+# e.g.
+# const baseURL = process.env.E2E_BASE_URL || 'http://localhos:8080';
+# export default defineConfig({
+# retries: process.env.CI ? 2 : 0..
+# use: {
+# baseURL,
+# trace: 'retain-on-failure'
+
+
+# Setup - Jhenkins and Docker
+
+# Install Docker Desktop
+# then install jhenkins using docker compose
+# after setup a docker image for jhenkins has been created then open it save the password
+# Now after all setup open VS code and make a jhenkins file > it  will conatin three stages i.e. 'build', 'test' and 'deploy'
+# Now go to jhenkins > create a job , enter item name , select 'pipeline' as item type , then pipeline with scm, scm as git, give the git code url , select branch as main> click on save > then click on "Build Now"
+# After success you will see
+# Start > Checkout SCM > Build > Test > Deploy > End
+# few realtime scenario
+# START > CHECKOUT SCM > BUILD > TEST (UNIT TEST & INTEGRATION TEST PARRALEL) > DEPLOY > E2E > END
+
+# CI/CD using github action
+# Go to Github > Action > Setup a workflow yourself > Select yaml name and add yml detail nd create it > yml script has build job, unit test integration and deploye job > commit the changes and observe workflow has been created and pipeline is running
+# How do you store secrets in GitHub Actions?
+# Go to GitHub → Repository → Settings → Secrets and variables → Actions,
+# then add your secrets (like API_KEY, PASSWORD, etc.)
+# In workflow:
+# env:
+#   API_KEY: ${{ secrets.API_KEY }}
+# Explanation:
+# Secrets are encrypted and only accessible in workflows.
+
+
+# 21. Playwright Test Agent:
+# npx playwright init-agents --loop=vscode
+# 🎭 planner:- explores the app and produces a Markdown test plan (create test plan)
+# 🎭 generator:- transforms the Markdown plan into the Playwright Test files ( generate test script)
+# 🎭 healer:- executes the test suite and automatically repairs failing tests ( repairing the failing test cases)
+
+# Complete Playwright Automation Framework Structure (BDD + POM + Allure + CI/CD)
+# playwright-bdd-framework/
+# │
+# ├── .github/
+# │   └── workflows/
+# │       └── playwright.yml                # CI/CD pipeline (GitHub Actions)
+# │
+# ├── config/
+# │   ├── env/
+# │   │   ├── dev.env                      # Development environment variables
+# │   │   ├── stage.env                    # Staging environment variables
+# │   │   └── prod.env                     # Production environment variables
+# │   │
+# │   └── config.js                        # Loads env files dynamically
+# │
+# ├── tests/
+# │   ├── features/
+# │   │   ├── login.feature                # BDD scenarios
+# │   │   ├── search.feature
+# │   │   └── cart.feature
+# │   │
+# │   └── step-definitions/
+# │       ├── loginSteps.js                # Step definitions linked to feature
+# │       ├── searchSteps.js
+# │       └── hooks.js                     # Before/After scenario hooks
+# │
+# ├── pages/
+# │   ├── BasePage.js                      # Common reusable methods
+# │   ├── LoginPage.js                     # Page Object for login page
+# │   ├── HomePage.js                      # Page Object for home page
+# │   └── CartPage.js                      # Page Object for cart page
+# │
+# ├── utils/
+# │   ├── testData.js                      # Test data, users, credentials
+# │   ├── helpers.js                       # Utility methods
+# │   ├── apiHelper.js                     # For API + UI integrated testing
+# │   └── logger.js                        # Custom logger using winston/pino
+# │
+# ├── reports/
+# │   ├── allure-results/                  # Allure raw test results
+# │   └── allure-report/                   # Generated HTML report
+# │
+# ├── playwright.config.js                 # Global Playwright settings
+# ├── cucumber.config.js                   # CucumberJS + Playwright integration
+# ├── package.json                         # Dependencies and npm scripts
+# ├── .env                                 # Default environment variables
+# ├── .gitignore                           # Ignore node_modules, reports, etc.
+# └── README.md                            # Documentation for repo
+
+# ENVIRONMENT******************
+# $env:ENV="QA"     then npx playwright test --grep "@regression"
+# SUppose you dont want to ru that particular test with tag regression and run other all the - npx playwright test --grep-invert "@regression"
+# RETRIES**********************
+# To Handle Retries, we can create a test suite using describe and then add retries to that particular test suite so it wont retries the whole script , ony that test suite
+# EX:
+# test.describe('@stability', () => {
+
+#   test.describe.configure({ retries: 2 });   //this is test suite which will retries 2 times  for test A and test B
+
+#   test('test A', async () => {
+#     // retried 2 times
+#   });
+
+#   test('test B', async () => {
+#     // retried 2 times
+#   });
+
+# });
+
+# test('test C outside describe', async () => {   // this is another test suite which will not retries
+#   // no retries
+# });
+
+# Different Type of RETRIES
+# A. Auto waiting (Built in playwright retries)
+# Playwright automatically retries - locators, actions, assertions until timeout
+# ex: await expect(btn).toBeVisible();
+# B. Test Level Retries - Pre-Test Retry (recommended + most precise)
+# Ex: test('@some flacky test', async() => {
+# }).retry(2);
+# C. Suite Level Retries
+# Ex: test.describe('@stability', ()=> {
+# test.describe.configure({retries:2});
+# D. Global Retries(Playwright Config)
+# retries:2
+# E. Project - level retries(multi-project config)
+# Ex: project: [
+# { name: 'chrome', retries: 0 },
+# { name: 'mobile', retries: 2}
+# ]
+# F. Overall Retries, CLI level
+# EX: npx playwright test --retries=2
+# G. Retry Only Failed Test Later
+# Ex: npx playwright test --last-failed
+
+# **PARALLEL EXECUTION********************
+# A. Enable Parallel Execution(project-Wide)**
+# Add below thing in playwright.config.js
+# fullyParallel: true,
+# worker: '50%',
+# It enables per-test paralleslism
+# -limits load to avoid system/CI stress
+# -prevents accidental over-paralleslization
+# B. Add Test SUites for multiple test  using test.describe
+# Ex: test.describe('@smoke @regression', () = {
+# test('stability', async({retries:2}) =>{
+# });
+# });
+
+# and then run based on tags , which will run test under suites parallely
+# C. Sometime we want to run test in SERIAL strictly , opposite to parallel
+# Ex: test.descibe.serial('checkout flow', () => {
+# test('step 1', async() => {});
+# test('step2', async() => {});
+# });
+# D. Multi - Project Parallel(cross-browser/env)
+# Ex: project: [
+# { name: 'chromium'},
+# { name: 'firefox' },
+# ]
+
+# **DEBUG MODE****************************
+# A. Enable Traces on Failure**
+# In config file
+# use: {
+# trace: 'retain-on-failure',
+# }
+# B. Run Signle test in debug mode
+# EX: npx playwright test tests/e2e/place-order.spec.js --debug
+# or
+# npx playwright test --grep "@checkout" --debug
+# C. View Trace after failure
+# Ex: npx playwright show-trace
+# or
+# npx playwright show-trace test-result/<trace.zip>   - it will open specific trace
+# D. Generate Trace Manually (temporary enable full trace)
+# Ex: npx playwright test --trace=on
+
+# CI/CD Pipeline***************************
+
+# Pipeline Mindset means:
+# A. Separate smoke vs regression via tags
+# EX: test.describe('@checkout @regression', () => {
+#     test.describe('@cart @smoke', () => {
+
+# B. CI- 0nly retry (local no retry)
+# Ex: In config file
+# retries: process.env.CI ? 2:0
+# C. Always headless in CI
+# Ex: use: {
+# headless: process.env.CI ? true : false,
+# }
+# D. Always collect trace & video on CI failure
+# Ex:
+# use: {
+#   trace: process.env.CI ? 'retain-on-failure' : 'off',
+#   video: process.env.CI ? 'retain-on-failure' : 'off',
+#   screenshot: 'only-on-failure'
+# }
+
+# E. Env Based baseURL (not hardcoded)
+# Ex: use: {
+#   baseURL: process.env.BASE_URL || 'https://www.saucedemo.com'
+# }
+
+# F. Quarantine flaky tests(do not hide)
+# Never delete flaky test , always quarantine them
+# Tag them and then exlude in CI Regression
+# Ex:
+# --grep-invert "@flaky"
+
+
+# ✅ What is CI/CD?
+# CI/CD stands for:
+# CI — Continuous Integration
+# CD — Continuous Delivery / Continuous Deployment
+
+# 🟢 CI — Continuous Integration (Developer + Testing Focus)
+# Whenever a developer pushes code to repo:
+
+# ✔ code is automatically built
+# ✔ automated tests run
+# ✔ quality gates execute
+# ✔ reports are generated
+
+# In CI pipeline, typically we run:
+# unit tests, API tests, smoke UI tests, linting / formatting checks, security scans
+
+# As SDET — your Playwright tests run here 👍
+
+# 🔵 CD — Continuous Delivery (Manual Release Ready)
+# Code is:
+# ✔ packaged
+# ✔ versioned
+# ✔ ready to deploy
+
+# But release to production requires manual approval.
+# This is used when:
+# ✔ business wants control
+# ✔ regulated industries (banking, healthcare)
+# ✔ human validation needed
+
+# 🟣 CD — Continuous Deployment (Automatic Release)
+# Every approved build goes automatically to:
+# ✔ staging
+# ✔ pre-prod
+# ✔ sometimes production
+
+# No manual deployment step.
+
+# 🧠 Simple way to remember it
+
+# CI = Test code automatically
+# CD = Deliver code automatically
+
+# 🎯 Why do companies use CI/CD?
+# Because manual workflows cause:
+# ❌ late bug discovery
+# ❌ unstable releases
+# ❌ last-minute integration failures
+# ❌ human mistakes
+# ❌ slow deployments
+
+# CI/CD delivers:
+# ✔ faster feedback
+# ✔ stable builds
+# ✔ repeatable deployments
+# ✔ parallel testing
+# ✔ visibility via reports
+# ✔ confidence to release often
+
+# 🟢 Where does SDET fit in CI/CD?
+
+# SDET role contributes to:
+# ✔ deciding which tests run on each pipeline stage
+# ✔ keeping tests CI-safe
+# ✔ tagging suites (smoke / regression / stability)
+# ✔ ensuring retries don’t mask bugs
+# ✔ adding reporting & trace artifacts
+# ✔ monitoring flaky test behavior
+# ✔ breaking pipelines when quality is at risk
+
+# 🟣 Typical Pipeline Execution Flow
+# Commit pushed to GitHub →
+
+# 1️⃣ Build
+# 2️⃣ Install dependencies
+# 3️⃣ Static checks
+# 4️⃣ Unit tests
+# 5️⃣ API tests
+# 6️⃣ UI smoke tests
+# 7️⃣ Generate reports
+# 8️⃣ Deploy based on pass criteria
+
+# Nightly →
+# ✔ Full regression
+# ✔ Stability tests
+# ✔ Performance tests
+
+# This is exactly how companies run pipelines.
+# As an SDET, I design automation tests so they are CI-safe, stateless, grouped by tags, and run selectively in stages — for example smoke tests on PRs, regression tests on main branch, and stability or flaky suites in nightly runs.
+
+# The YAML pipeline defines when each suite runs, how retries and traces behave in CI, and ensures every execution generates useful artifacts like traces, screenshots and Allure reports for debugging and quality tracking.
+# Simulating CI locally
+# EX:
+# CI=true npx playwright test --grep "@regression"
+# 🧪 CI/CD EXERCISE 1 — Smoke Suite Routing (PR Trigger)
+# 🎯 Objective
+# To verify that only Smoke tests run on Pull Requests, and all other suites (Regression, Invalid, Stability) are correctly skipped using CI pipeline conditions.
+
+# 🧠 What We Set Up Before Running
+# Tests were tagged properly (@smoke, @regression, etc.)
+# GitHub Actions YAML had conditional execution:
+# Smoke → if: pull_request
+# Regression → if: push
+# Invalid → depends on regression
+# Stability → if: schedule
+# Playwright config was CI-safe:
+# retries only in CI
+# trace = retain-on-failure
+# environment resolved via ENV
+
+# 🧪 Steps Performed
+# Step 1: Create Feature Branch
+# git checkout -b ci-exercise-1-smoke
+
+# Step 2: Make a Small Safe Change
+# (e.g.add a comment to any file)
+
+# Step 3: Commit & Push
+# git add .
+# git commit -m "CI Exercise 1: trigger smoke suite"
+# git push origin ci-exercise-1-smoke
+
+# Step 4: Create Pull Request to main
+# This triggers the pull_request event in GitHub Actions
+
+# 🔍 What We Verified in GitHub Actions
+# ✅ Pipeline Summary
+# Status: Success
+# Trigger: Pull Request
+# Duration: ~1 minute
+
+# ✅ Job Execution Graph
+# Job		Status		Reason
+# Smoke Suite	✅ Ran		Correct for PR
+# Regression Suite	⛔ Skipped	Correct
+# Invalid / Negative⛔ Skipped	Correct
+# Stability / Flaky	⛔ Skipped	Correct
+
+# This visually confirmed correct CI routing.
+
+# 🔎 Job-Level Verification (Smoke Suite)
+
+# Inside Smoke Suite → Run Smoke Tests step:
+# npx playwright test --grep "@smoke"
+
+
+# Output:
+# Running 1 test using 1 worker
+# ✔ Valid User should place order successfully
+# 1 passed
+# ✔ Confirmed:
+# Correct command ran
+# Only smoke-tagged test executed
+# No retries
+# No failures
+# Correct environment (ENV: qa)
+
+# FIND TRACES*******************
+# (Download from CI Artifact)
+# Make the change in Yml FIle for always traces on
+# On any assertion , artifact will generate in CI
+# Download the zip folder > unzip that , copy path of trace.zip
+# Then in terminal write ( npx playwright show-trace "Paste the location of trace.zip file"
+# it will show the trace here
+# 🔄 Full correct workflow (end-to-end)
+
+# 1️⃣ Start fresh
+# git checkout main
+# git pull
+# git checkout -b feature/some-change
+
+# 2️⃣ Write code / tests
+# 3️⃣ Run local tests
+# npx playwright test
+
+# 4️⃣ Stage changes
+# git add .
+
+# 5️⃣ Commit
+# git commit -m "Meaningful commit message"
+
+# 6️⃣ Push branch
+# git push origin feature/some-change
+
+# 7️⃣ Create PR (feature → main)
+# 8️⃣ CI runs automatically
+# 9️⃣ If CI passes → merge to main
+# 🔚 Done.
+# Code → CI (tests) → Build → CD → Environment → Validation → Release
+
+# iframe****************
+# (using frame loctor)
+# // iframe locator
+#  this.iframe = page.frameLocator('#mce_0_ifr');
+
+#  //element Inside iframe
+#  this.editorBody = this.iframe.locator('#tinymce');
+# expect(await iframePage.getPageHeading()).toContain('Editor');
+# Allure Report ****************************
+# npx allure generate allure-results --clean   //generate allure report
+# allure serve   //open allure report
+# or npx allure open  //open allure report
+# npx playwright show-report   - open html report
+# Upload and Download Files********************
+# We will DO this Later
+
+# Network/API Integration with Playwright**********
+# validating backend calls triggered by UI
+# waiting for correct API responses
+# mocking unstable APIs
+# making UI tests faster & more stable
+
+
+# API TESTING *****************************************************
+# Basic Get Request 
+# - Send API request
+# - Read Response
+# - Assert status
+# - Assert JSON
+
+
+# Endo
+# schedule_pcp_appoin
+# pcp_appointment_sch
