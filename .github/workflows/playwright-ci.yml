@@ -32,6 +32,7 @@ jobs:
       run: npx playwright test --grep "@smoke"
 
     - name: Upload Trace (Smoke)
+      if: always()
       uses: actions/upload-artifact@v4
       with:
         name: trace-smoke
@@ -64,15 +65,22 @@ jobs:
         --grep-invert "@invalid|@stability|@wip"
 
     - name: Upload Trace (Regression)
+      if: always()
       uses: actions/upload-artifact@v4
       with:
         name: trace-regression
         path: test-results/**/*.zip
 
+    - name: Install Allure CLI
+      if: always()
+      run: npm install -g allure-commandline
+
     - name: Generate Allure Report
-      run: npx allure generate allure-results --clean -o allure-report
+      if: always()
+      run: allure generate allure-results --clean -o allure-report
 
     - name: Upload Allure Report (Regression)
+      if: always()
       uses: actions/upload-artifact@v4
       with:
         name: allure-report-regression
@@ -103,15 +111,22 @@ jobs:
       run: npx playwright test --grep "@invalid"
 
     - name: Upload Trace (Invalid)
+      if: always()
       uses: actions/upload-artifact@v4
       with:
         name: trace-invalid
         path: test-results/**/*.zip
 
+    - name: Install Allure CLI
+      if: always()
+      run: npm install -g allure-commandline
+
     - name: Generate Allure Report
-      run: npx allure generate allure-results --clean -o allure-report
+      if: always()
+      run: allure generate allure-results --clean -o allure-report
 
     - name: Upload Allure Report (Invalid)
+      if: always()
       uses: actions/upload-artifact@v4
       with:
         name: allure-report-invalid
@@ -120,7 +135,7 @@ jobs:
 
 
   # ==========================
-  # 4️⃣ NIGHTLY STABILITY SUITE (OPTIONAL)
+  # 4️⃣ NIGHTLY STABILITY SUITE
   # ==========================
   stability-tests:
     runs-on: ubuntu-latest
@@ -141,15 +156,22 @@ jobs:
       run: npx playwright test --grep "@stability"
 
     - name: Upload Trace (Stability)
+      if: always()
       uses: actions/upload-artifact@v4
       with:
         name: trace-stability
         path: test-results/**/*.zip
 
+    - name: Install Allure CLI
+      if: always()
+      run: npm install -g allure-commandline
+
     - name: Generate Allure Report
-      run: npx allure generate allure-results --clean -o allure-report
+      if: always()
+      run: allure generate allure-results --clean -o allure-report
 
     - name: Upload Allure Report (Stability)
+      if: always()
       uses: actions/upload-artifact@v4
       with:
         name: allure-report-stability
